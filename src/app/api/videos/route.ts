@@ -1,4 +1,4 @@
-export async function GET(request: Request)
+export async function GET()
 {
     const users = [
         {id : 1 , name: "Alice"},

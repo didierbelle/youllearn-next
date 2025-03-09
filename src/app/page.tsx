@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image";
+// import Image from "next/image";
 import { useState } from "react";
-import Video from "@/components/Video";
+// import Video from "@/components/Video";
 import VideoContainer from "@/components/VideoContainer";
 
 export default function Home() {

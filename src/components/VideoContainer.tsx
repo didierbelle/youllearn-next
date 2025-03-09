@@ -20,8 +20,13 @@ const VideoContainer = () => {
 
             const data = await response.json();
             setKeywords(data);
-        } catch (error : any) {
-            console.error("Erreur :", error?.message);
+        } catch (error : unknown) {
+            if (error instanceof Error) {
+                console.error("Erreur :", error.message);
+            } else {
+                console.error("Erreur inconnue :", error);
+            }
+            // console.error("Erreur :", error?.message);
         }
       }
     

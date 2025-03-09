@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 
 interface Keyword {
     id: number,
@@ -9,7 +8,6 @@ interface Keyword {
 
 const Keyword = ({ keyword, onRemove, onDel } : { keyword : Keyword; onRemove : (id: number) => void; onDel : (name: string) => void} ) => {
     
-    const [useful, setUseful] = useState(true);
 
     // const handleKeywordUtility = (e : React.MouseEvent<HTMLButtonElement>) => {
     //     console.log(e.target);

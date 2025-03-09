@@ -6,7 +6,7 @@ type User = {
     email? : string
 };
 
-export async function GET(request: Request) {
+export async function GET() {
 
     //const YOUTUBE_API_KEY = "AIzaSyA9vajdWV-uPTJ-zeJUbIsTa8kQZZaHrnI";
 
