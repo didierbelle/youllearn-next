@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Keyword from "./Keyword";
 import Video from "./Video";
 
+import { KeywordType } from "@/types/Keywords";
+
 const VideoContainer = () => {
 
     const [keywords, setKeywords] = useState([]);
@@ -39,7 +41,7 @@ const VideoContainer = () => {
 
 
     const handleRemoveKeyword = (id: number) => {
-        setKeywords((preKeywords) => preKeywords.filter(keyword => keyword.id !== id));
+        setKeywords((preKeywords) => preKeywords.filter((keyword : KeywordType)  => keyword.id !== id));
         // console.log(users);
     };
     
@@ -72,7 +74,7 @@ const VideoContainer = () => {
             <p>Dernier mot cle supprime :  { lastDeletedKeyword} </p>
 
               <div className="px-8 py-4 mb-4 text-center">
-                    {keywords.map(keyword => (
+                    {keywords.map((keyword : KeywordType) => (
 
                         <Keyword key={keyword.id} keyword={keyword} onRemove={handleRemoveKeyword} onDel={handleLastDelKeyword}/>
                     ))}

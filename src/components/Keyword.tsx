@@ -1,12 +1,9 @@
 "use client";
 
 
-interface Keyword {
-    id: number,
-    name: string
-};
+import { KeywordType } from "@/types/Keywords";
 
-const Keyword = ({ keyword, onRemove, onDel } : { keyword : Keyword; onRemove : (id: number) => void; onDel : (name: string) => void} ) => {
+const Keyword = ({ keyword, onRemove, onDel } : { keyword : KeywordType; onRemove : (id: number) => void; onDel : (name: string) => void} ) => {
     
 
     // const handleKeywordUtility = (e : React.MouseEvent<HTMLButtonElement>) => {
