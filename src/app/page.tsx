@@ -1,7 +1,5 @@
 import AppContainer from "@/components/AppContainer";
-// import Image from "next/image";
-// import Video from "@/components/Video";
-import VideoContainer from "@/components/VideoContainer";
+
 
 export default function Home() {
 

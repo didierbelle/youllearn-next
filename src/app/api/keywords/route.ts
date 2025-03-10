@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         const jsonResponse = JSON.parse(responseText);
         return NextResponse.json(jsonResponse, { status: 200 });
       } catch (error) {
-        console.error("Invalid JSON from AI:", responseText);
+        console.error("Invalid JSON from AI:", error);
         return NextResponse.json({ error: "Invalid response from AI" }, { status: 500 });
       }
     } catch (error) {
