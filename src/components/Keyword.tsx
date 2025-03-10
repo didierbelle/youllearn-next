@@ -1,9 +1,8 @@
 "use client";
 
 
-import { KeywordType } from "@/types/Keywords";
 
-const Keyword = ({ keyword, onRemove, onDel } : { keyword : KeywordType; onRemove : (id: number) => void; onDel : (name: string) => void} ) => {
+const Keyword = ({ keyword, onRemove } : { keyword : string; onRemove : (word: string) => void} ) => {
     
 
     // const handleKeywordUtility = (e : React.MouseEvent<HTMLButtonElement>) => {
@@ -12,13 +11,9 @@ const Keyword = ({ keyword, onRemove, onDel } : { keyword : KeywordType; onRemov
 
     const handleRemove = (e: React.MouseEvent<HTMLSpanElement>) => {
         e.stopPropagation(); // Prevent event bubbling
-        onRemove(keyword.id); // Call the parent function with the user ID
+        onRemove(keyword); // Call the parent function with the user ID
     };
 
-    const handleOnDel = (e : React.MouseEvent<HTMLParagraphElement>) => {
-        e.stopPropagation();
-        onDel(keyword.name);
-    }
 
   return (
         <span
@@ -41,7 +36,7 @@ const Keyword = ({ keyword, onRemove, onDel } : { keyword : KeywordType; onRemov
                     />
                 </svg>
 
-            <p className="whitespace-nowrap text-sm" onMouseOver={handleOnDel}>{keyword?.name}</p>
+            <p className="whitespace-nowrap text-sm">{keyword}</p>
         </span>
   )
 }

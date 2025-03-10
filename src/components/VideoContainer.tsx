@@ -4,44 +4,57 @@ import { useState, useEffect } from "react";
 import Keyword from "./Keyword";
 import Video from "./Video";
 
-import { KeywordType } from "@/types/Keywords";
-
-const VideoContainer = () => {
-
-    const [keywords, setKeywords] = useState([]);
-    const [lastDeletedKeyword, setLastDeletedKeyword] = useState("");
-
-    useEffect(() => {
-      async function fetchKeywords() {
-        try {
-            const response = await fetch("api/keywords");
-
-            if(!response.ok){
-                throw new Error("Erreur lors du chargement des utilisateurs");
-            }
-
-            const data = await response.json();
-            setKeywords(data);
-        } catch (error : unknown) {
-            if (error instanceof Error) {
-                console.error("Erreur :", error.message);
-            } else {
-                console.error("Erreur inconnue :", error);
-            }
-            // console.error("Erreur :", error?.message);
-        }
-      }
-    
-      fetchKeywords();
-    }, []);
-
-    const handleLastDelKeyword = (name: string) => {
-        setLastDeletedKeyword(name);
-    }
+// import { KeywordType } from "@/types/Keywords";
 
 
-    const handleRemoveKeyword = (id: number) => {
-        setKeywords((preKeywords) => preKeywords.filter((keyword : KeywordType)  => keyword.id !== id));
+const VideoContainer = ({interest} : {interest : string}) => {
+
+    const [keywords, setKeywords] = useState<string[]>([]);
+	const [videos, setVideos] = useState([]);
+  	// const interest = "investir en Afrique"; // Example phrase
+
+	useEffect(() => {
+		// async function generateKeywords() {
+		// 	try {
+		// 		const response = await fetch("/api/keywords", {
+		// 			method: "POST",
+		// 			headers: { "Content-Type": "application/json" },
+		// 			body: JSON.stringify({ phrase: interest }),
+		// 		});
+
+		// 		if (!response.ok) {
+		// 			throw new Error("Erreur lors du chargement des keywords");
+		// 		}
+
+		// 		const data = await response.json();
+		// 		setKeywords(data);
+		// 	} catch (error) {
+		// 		console.error("Erreur:", error);
+		// 	}
+		// }
+
+		async function fetchVideos() {
+			try {
+				const videos = await fetch("api/videos");
+
+				if(!videos.ok) throw new Error("Can't fetch videos");
+
+				const data = await videos.json();
+				setVideos(data.items);
+
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+		//generateKeywords();
+		fetchVideos();
+	}, [interest]);
+
+
+
+    const handleRemoveKeyword = (word: string) => {
+        setKeywords((preKeywords) => preKeywords.filter((keyword : string)  => keyword !== word));
         // console.log(users);
     };
     
@@ -71,19 +84,32 @@ const VideoContainer = () => {
                 <p className="whitespace-nowrap text-sm">Keywords generated : </p>
               </span>
 
-            <p>Dernier mot cle supprime :  { lastDeletedKeyword} </p>
 
               <div className="px-8 py-4 mb-4 text-center">
-                    {keywords.map((keyword : KeywordType) => (
-
-                        <Keyword key={keyword.id} keyword={keyword} onRemove={handleRemoveKeyword} onDel={handleLastDelKeyword}/>
+									
+                    {keywords.map((keyword : string) => (
+                        <Keyword key={keyword} keyword={keyword} onRemove={handleRemoveKeyword}/>
                     ))}
                 </div>
 
               
 
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
-                    <div className="h-fit w-fit rounded-lg bg-gray-200">
+                <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8">
+					{ 
+						videos.map((video : { 
+							id : { videoId : string }
+							snippet : { description :  string }
+						}, index : number) => {
+							const videoId = video?.id.videoId;
+							const description = video.snippet.description;
+							return (
+								<div key={index} className="h-fit w-fit rounded-lg bg-gray-50 pb-3 hover:border hover:border-red-200 transition duration-300 ease-in-out hover:scale-105">
+									<Video videoSrc={videoId} description={description}/>
+								</div>
+							);
+						})
+					}
+                    {/* <div className="h-fit w-fit rounded-lg bg-gray-200">
                         <Video videoSrc="https://www.youtube.com/watch?v=EFmxPMdBqmU"/>
                     </div>
                     <div className="h-fit w-fit rounded-lg bg-gray-200">
@@ -91,7 +117,7 @@ const VideoContainer = () => {
                     </div>
                     <div className="h-fit w-fit rounded-lg bg-gray-200">
                         <Video videoSrc="https://www.youtube.com/watch?v=EFmxPMdBqmU"/>
-                    </div>
+                    </div> */}
                 </div>
               
         </div>
