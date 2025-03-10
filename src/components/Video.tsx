@@ -16,7 +16,7 @@ const Video = ({ videoSrc, description } : { videoSrc : string; description : st
         allowFullScreen
         title="YouTube video player"
       ></iframe>
-      <h2 className='font-light text-left text-neutral-700 my-2 px-8'> { description } </h2>
+      <h2 className='font-mono text-left text-neutral-700 my-2 px-8'> { description } </h2>
     </div>
   );
 };

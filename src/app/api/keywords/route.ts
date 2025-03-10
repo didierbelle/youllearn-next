@@ -8,33 +8,48 @@ const genAI = new GoogleGenerativeAI(THE_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 
-export async function POST(req: Request) {
+export async function POST(req: Request){
+    if(req.method !== "POST") return NextResponse.json({ error: "Invalid request method" }, { status: 405 });
+
     try {
-      // Extract phrase from request body
-      const { phrase } = await req.json();
-  
-      if (!phrase) {
-        return NextResponse.json({ error: "Phrase is required" }, { status: 400 });
-      }
-  
-      // Construct AI prompt
-      const prompt = `Generate five keywords about ${phrase} that can help me learn everything on it. Return the response as a JSON array.`; 
-  
-      // Call AI model
-      const result = await model.generateContent(prompt);
-      const responseText = await result.response.text();
-  
-      // Validate AI response
-      try {
-        const jsonResponse = JSON.parse(responseText);
-        return NextResponse.json(jsonResponse, { status: 200 });
-      } catch (error) {
-        console.error("Invalid JSON from AI:", error);
-        return NextResponse.json({ error: "Invalid response from AI" }, { status: 500 });
-      }
+        const { prompt } = await req.json();
+        if(!prompt) return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+
+        const aiPrompt = `Re-structure the following prompt to be more clear and concise, focusing on the core intent.  Then, extract a list of relevant keywords (at least 5, separated by commas) related to both the original and the restructured prompt. Present the output in JSON format with 'restructuredPrompt' and 'keywords' fields.
+
+            Original Prompt: ${prompt}
+
+            Example Response Format:
+            {
+                "restructuredPrompt": "Concise, improved prompt based on the original input.",
+                "keywords": "keyword1, keyword2, keyword3, keyword4, keyword5"
+            }
+            `;
+
+        const result = await model.generateContent( aiPrompt );
+        
+        const response = result.response;
+        const text = response.text();
+
+        let parsedResult;
+        try {
+            parsedResult = JSON.parse(text);
+        } catch (error) {
+            console.error("Error parsing JSON response from Gemini:", error);
+            console.error("Raw response from Gemini:", text); // Log the raw response for debugging
+            return NextResponse.json({ 
+                error: "Failed to parse JSON response from AI.  Check AI's response format.",    rawResponse: text }, { status: 500 });
+        }
+
+        if(!parsedResult.restructuredPrompt || !parsedResult.keywords) {
+            return NextResponse.json({ 
+                error: "Failed to parse JSON response from AI.  Check AI's response format.",    rawResponse: text }, { status: 500 });
+        }
+
+        return NextResponse.json(parsedResult, { status: 200 });
     } catch (error) {
-      console.error("Server Error:", error);
-      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        console.error("Error in API route:", error);
+        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
-  }
-  
+}

@@ -3,15 +3,17 @@
 import { useState, useEffect } from "react";
 import Keyword from "./Keyword";
 import Video from "./Video";
+import KeywordGenerator from "./KeywordGenerator";
 
 // import { KeywordType } from "@/types/Keywords";
 
 
 const VideoContainer = ({interest} : {interest : string}) => {
 
-    const [keywords, setKeywords] = useState<string[]>([]);
 	const [videos, setVideos] = useState([]);
   	// const interest = "investir en Afrique"; // Example phrase
+
+	
 
 	useEffect(() => {
 		// async function generateKeywords() {
@@ -48,17 +50,9 @@ const VideoContainer = ({interest} : {interest : string}) => {
 		}
 
 		//generateKeywords();
-		fetchVideos();
+		//fetchVideos();
 	}, [interest]);
 
-
-
-    const handleRemoveKeyword = (word: string) => {
-        setKeywords((preKeywords) => preKeywords.filter((keyword : string)  => keyword !== word));
-        // console.log(users);
-    };
-    
-    console.log(keywords);
 
   return (
         <div className="px-8 py-4 mb-4 text-center">
@@ -85,14 +79,10 @@ const VideoContainer = ({interest} : {interest : string}) => {
               </span>
 
 
-              <div className="px-8 py-4 mb-4 text-center">
-									
-                    {keywords.map((keyword : string) => (
-                        <Keyword key={keyword} keyword={keyword} onRemove={handleRemoveKeyword}/>
-                    ))}
-                </div>
+              <div className="px-8 py-4 mb-4 text-center">						
+					<KeywordGenerator />
+				</div>
 
-              
 
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8">
 					{ 
@@ -103,7 +93,7 @@ const VideoContainer = ({interest} : {interest : string}) => {
 							const videoId = video?.id.videoId;
 							const description = video.snippet.description;
 							return (
-								<div key={index} className="h-fit w-fit rounded-lg bg-gray-50 pb-3 hover:border hover:border-red-200 transition duration-300 ease-in-out hover:scale-105">
+								<div key={index} className="h-fit w-fit rounded-lg bg-red-50 pb-3 scale-95 hover:border hover:border-red-200 transition duration-300 ease-in-out hover:scale-100">
 									<Video videoSrc={videoId} description={description}/>
 								</div>
 							);

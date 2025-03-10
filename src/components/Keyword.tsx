@@ -18,7 +18,7 @@ const Keyword = ({ keyword, onRemove } : { keyword : string; onRemove : (word: s
   return (
         <span
             // key={keyword.id}
-            className="inline-flex items-center justify-center rounded-full border border-emerald-500 mx-1.5 px-2.5 py-0.5 text-emerald-700 transition hover:bg-emerald-200"
+            className="inline-flex items-center justify-center rounded-full border border-emerald-500 mx-1.5 px-2.5 py-0.5 text-emerald-700 transition hover:-rotate-1 hover:bg-emerald-200"
             onClick={handleRemove}
             >
                 <svg
